@@ -147,8 +147,9 @@
     "sqlServerOffer": {
       "type": "string",
       "allowedValues": [
-        "SQL2016SP1-WS2016",
-        "SQL2016SP2-WS2016"
+        "SQL2016SP2-WS2016",
+        "SQL2017-WS2016",
+        "SQL2019-WS2019"
       ],
       "metadata": {
         "description": "The SQL Server Version"
