@@ -60,11 +60,12 @@
     },
     "mySqlVersion": {
       "type": "string",
-      "defaultValue": "5.7",
+      "defaultValue": "8.0",
       "allowedValues": [
         "5.5",
         "5.6",
-        "5.7"
+        "5.7",
+        "8.0"
       ],
       "metadata": {
         "description": "MySql Version"
@@ -96,10 +97,11 @@
     "imageOffer": "WindowsServer",
     "dnsNameForPublicIP": "[tolower(parameters('vmName'))]",
     "OSDiskName": "[concat('osdisk-', parameters('vmName'))]",
-	"assetLocation": "https://raw.githubusercontent.com/Azure/AzureStack-QuickStart-Templates/master/mysql-standalone-server-windows/",
+	"assetLocation": "https://raw.githubusercontent.com/msftcoderdjw/AzureStack-QuickStart-Templates/staging/mysql-standalone-server-windows/",
     "cseBlobNameScript": "MySql.Setup.CustomScriptExtension.ps1",
 	
 	"mySqlInstallationZipPath": {
+    "8.0": "https://dev.mysql.com/get/Downloads/MySQL-8.0/mysql-8.0.22-winx64.zip",
 		"5.7": "https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.17-winx64.zip",
 		"5.6": "https://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.35-winx64.zip",
 		"5.5": "https://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.54-winx64.zip"

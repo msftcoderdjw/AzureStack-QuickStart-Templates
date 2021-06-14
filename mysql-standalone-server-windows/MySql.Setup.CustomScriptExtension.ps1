@@ -173,10 +173,34 @@ function Install-MySqlServer
 
         if( -not (Get-Service -Name $serviceName -ErrorAction SilentlyContinue))
         {
-            if($MySqlVersion -eq "5.6" -or $MySqlVersion -eq "5.5" -or $MySqlVersion -eq "5.7")
+            if($MySqlVersion -eq "5.6" -or $MySqlVersion -eq "5.5" -or $MySqlVersion -eq "5.7" -or $MySqlVersion -eq "8.0")
             {
-               if ($MySqlVersion -eq "5.7")
-               {
+                if ($MySqlVersion -eq "8.0") {
+                    if (!(Get-WmiObject -Class Win32_Product -Filter "Name LIKE '%Visual C++ 2015%'")) {
+                        # MySQL 8.0 Server requires the Microsoft Visual C++ 2015 Redistributable Package to run on Windows platforms.
+                        # https://dev.mysql.com/doc/refman/8.0/en/windows-installation.html
+                        Write-Verbose -Message "Download Visual C++ 2015 Redistributable"
+                        $vcRuntimes = @(
+                            @{
+                                "FileName"="vc_redist.x64.exe"
+                                "FileUri"="https://aka.ms/vs/16/release/vc_redist.x64.exe"
+                            }
+                        )
+
+                        foreach ($vcRuntime in $vcRuntimes) {
+                            $vcRuntimeUri = $vcRuntime.FileUri
+                            Download-Package $vcRuntimeUri
+                            $vcRuntimeFile = (Join-Path "$PSScriptRoot" $vcRuntime.FileName)
+                            Write-Verbose -Message "Install Visual C++ 2015 Redistributable, $($vcRuntime.FileName)"
+                            Start-Process -File $vcRuntimeFile -ArgumentList "/install /quiet /passive /norestart /log $env:SystemDrive\Logs\vc_$($vcRuntime.FileName).log" -Wait 
+                        }
+                    } else {
+                        Write-Verbose -Verbose -Message "Microsoft Visual C++ 2015 Redistributable is installed"
+                        Get-WmiObject -Class Win32_Product -Filter "Name LIKE '%Visual C++ 2015%'"
+                    }
+                }
+                if ($MySqlVersion -eq "5.7" -or $MySqlVersion -eq "8.0")
+                {
                     # Initialize the data folder
                     if(-not (Test-Path (Join-Path $Destination "data")))
                     {
